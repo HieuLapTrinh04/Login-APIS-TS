@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const FormLogin: React.FC = () => {
+  const navigate = useNavigate();
   const User = [
     {
       userName: "minhhieu",
@@ -14,6 +16,7 @@ const FormLogin: React.FC = () => {
 
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -26,20 +29,24 @@ const FormLogin: React.FC = () => {
     setPassword(event.target.value);
   };
 
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const checkAccount = () => {
     const index = User.findIndex(e => e.userName === userName && e.password === password);
     if (index === -1) {
       alert("Sai tên hoặc mật khẩu !!");
       return
     }
-    window.location.href = "/about";
-    //  // eslint-disable-next-line no-undef
-    //  if (userName !== User[i] || password !== User[i]) {
-    //   alert("Sai tên hoặc mật khẩu !!");
-    // } else window.Location.href("/about");
+    localStorage.setItem('isLoggedIn', 'true')
+    localStorage.setItem('loggedUser', userName)
+    // window.location.href = "/about";
+    navigate('/about');
   };
 
-  return (
+  return ( 
+    <>
     <form onSubmit={handleSubmit}>
       <div className="flex flex-col">
         <input
@@ -52,13 +59,14 @@ const FormLogin: React.FC = () => {
           value={userName}
         />
         <input
-          type="password"
+          type={showPassword ? "text" : "password"}
           id="password"
           placeholder="Password..."
           className="m-auto w-64 mb-5 h-10 border-red-500 rounded-lg ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset p-2"
           onChange={handleChangePassword}
           value={password}
-        />
+        /> <br /> 
+        
         <div className="flex flex-row m-auto">
           <input type="checkbox" name="check" id="remember_me" />
           <label
@@ -76,12 +84,19 @@ const FormLogin: React.FC = () => {
             type="submit"
             className="rounded-full w-64 h-12 bg-emerald-400 mt-7 mb-7 hover:bg-emerald-500"
             // disabled={isDisabled}
+            onClick={() => console.log('aaaaaa')}
           >
             Login
           </button>
         </div>
       </div>
     </form>
+    <div className="relative bottom-40 left-1">
+    <button onClick={toggleShowPassword}>
+    {showPassword ? "Hide" : "Show"} Password
+  </button>
+    </div>
+    </>
   );
 };
 export default FormLogin;

@@ -1,22 +1,26 @@
 // import "./App.css";
 import Login from "./components/Login";
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
+import Home from "./components/Home";
+import About from "./components/About";
+import ProtectedRouter from "./components/ProtectedRouter";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div> aaa</div>,
+    element: <ProtectedRouter><Home /></ProtectedRouter>,
   },
   {
     path: "/login",
     element: <Login />,
-  },
+  }
+  ,
   {
     path: "/about",
-    element: <>Day la trang about</>,
+    element: <ProtectedRouter><About /></ProtectedRouter>,
   },
+  
 ]);
 
 const App: React.FC = () => {
